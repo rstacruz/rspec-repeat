@@ -7,10 +7,10 @@ describe 'a stubborn test' do
   include Rspec::Repeat
   
   around do |example|
-    repeat example, 3.times
+    repeat example, 10.times
   end
 
-  it 'works' do
+  it 'works, eventually' do
     expect(rand(2)).to eq 0
   end
 end
@@ -22,9 +22,22 @@ end
 
 ## Advanced usage
 
+### Options
+
+```
+repeat example, 3.times, { options }
+```
+
+You can pass an `options` hash:
+
+- __wait__ *(Numeric)* - seconds to wait between each retry.
+- __verbose__ *(Boolean)* - if *true*, it will print messages upon failure.
+- __exceptions__ *(Array)* - if given, it will only retry exception classes from this list.
+- __clear_let__ *(Boolean)* - if *false*, `let` declarations will not be cleared.
+
 ### Attaching to tags
 
-This will allow you to repeat any example thrice by tagging it.
+This will allow you to repeat any example multiple times by tagging it.
 
 ```rb
 # rails_helper.rb or spec_helper.rb
@@ -43,7 +56,7 @@ end
 
 ### Attaching to features
 
-This will make all `spec/features/` retry thrice. Perfect for stubborn Poltergeist/Selenium tests.
+This will make all `spec/features/` retry thrice. Perfect for Poltergeist/Selenium tests that intermittently fail for no reason.
 
 ```rb
 # rails_helper.rb or spec_helper.rb
