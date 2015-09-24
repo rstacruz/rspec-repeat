@@ -18,9 +18,14 @@ end
 
 <br>
 
+## Advanced usage
+
 ### Attaching to tags
 
+This will allow you to repeat any example thrice by tagging it.
+
 ```rb
+# rails_helper.rb or spec_helper.rb
 RSpec.configure do
   config.around :each, :foobar do |example|
     repeat example, 3.times
@@ -31,6 +36,19 @@ end
 ```rb
 describe 'stubborn tests', :foobar do
   # ...
+end
+```
+
+### Attaching to features
+
+This will make all `spec/features/` retry thrice. Perfect for stubborn Poltergeist/Selenium tests.
+
+```rb
+# rails_helper.rb or spec_helper.rb
+RSpec.configure do
+  config.around :each, type: :feature do
+    repeat example, 3.times
+  end
 end
 ```
 
