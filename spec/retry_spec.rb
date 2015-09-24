@@ -4,7 +4,7 @@ describe 'retry' do
   include RSpec::Repeat
 
   around do |example|
-    repeat example, 20.times
+    repeat example, 100.times
   end
 
   it 'works' do

@@ -1,70 +1,102 @@
 require 'rspec/repeat/version'
 
 module RSpec
-  # Retry
+  # Allows you to repeat RSpec examples.
   module Repeat
     # Retries an example.
     #
     #     include Rspec::Repeat
     #
     #     around do |example|
-    #      repeat example, 3
+    #       repeat example, 3
     #     end
     #
+    # Available options:
+    #
+    # - `wait` - seconds to wait between each retry
+    # - `verbose` - print messages if true
+    # - `exceptions` - if given, only retry exceptions from this list
+    # - `clear_lets` - when false, don't clear `let`'s
+    #
     def repeat(ex, count, options = {})
-      example = RSpec.current_example
-      wait = options[:wait]
-      exceptions = options[:exceptions]
-      verbose = options[:verbose]
-      verbose = !!ENV['RSPEC_RETRY_VERBOSE'] if verbose.nil?
-      clear_lets = options[:clear_lets]
-      clear_lets = true if clear_lets.nil?
-
-      count.each do |i|
-        example.instance_variable_set :@exception, nil
-        ex.run
-        break if example.exception.nil?
-        break if Util.matches_exceptions?(exceptions, example.exception)
-        Util.print_failure(i, example) if verbose
-        self.clear_lets if clear_lets
-        sleep wait if wait.to_i > 0
-      end
+      Repeater.new(count, options).run(ex, self)
     end
 
-    def clear_lets
-      if respond_to? :__init_memoized, true
-        __init_memoized
-      else
-        @__memoized = nil
-      end
-    end
+    # Much of this code is borrowed from:
+    # https://github.com/NoRedInk/rspec-retry/blob/master/lib/rspec/retry.rb
+    class Repeater
+      attr_accessor :count, :wait, :exceptions, :verbose, :clear_lets
 
-    module Util # :nodoc:
-      module_function
+      def initialize(count, options = {})
+        options.each do |key, val|
+          send :"#{key}=", val
+        end
 
-      def print_failure(i, example)
-        msg =
-          "RSpecRetryAlt: #{nth(i + 1)} try error in #{example.location}:\n" \
-          "  #{example.exception}\n"
-          puts msg
+        self.count = count
+        self.count = count.times if count.is_a?(Numeric)
+        self.verbose = ENV['RSPEC_RETRY_VERBOSE'] if verbose.nil?
+        self.clear_lets = true if clear_lets.nil?
       end
 
-      def nth(n)
-        if n % 10 == 1 && n != 11
-          "#{n}st"
-        elsif n % 10 == 2 && n != 11
-          "#{n}nd"
-        elsif n % 10 == 3 && n != 11
-          "#{n}rd"
-        else
-          "#{n}th"
+      def run(ex, ctx)
+        example = current_example(ctx)
+        ex = ex
+
+        count.each do |i|
+          example.instance_variable_set :@exception, nil
+          ex.run
+          break if example.exception.nil?
+          break if matches_exceptions?(exceptions, example.exception)
+          print_failure(i, example) if verbose
+          clear_memoize(ctx) if clear_lets
+          sleep wait if wait.to_i > 0
         end
       end
 
+      # Returns the current example being ran by RSpec
+      def current_example(ctx)
+        if RSpec.respond_to?(:current_example)
+          RSpec.current_example
+        else
+          ctx.example
+        end
+      end
+
+      # Clears memoized stuff out of an ExampleGroup to clear out the `let`s
+      def clear_memoize(ctx)
+        if ctx.respond_to?(:__init_memoized, true)
+          ctx.send :__init_memoized
+        else
+          ctx.instance_variable_set :@__memoized, nil
+        end
+      end
+
+      # Checks if `exception` is in `exceptions`
       def matches_exceptions?(exceptions, exception)
         return unless exceptions
         exceptions.any? do |exception_klass|
           exception.is_a?(exception_klass)
+        end
+      end
+
+      def print_failure(i, example)
+        msg =
+          "RSpec::Repeat: #{nth(i + 1)} try error in #{example.location}:\n" \
+          "  #{example.exception}\n"
+        RSpec.configuration.reporter.message(msg)
+      end
+
+      # borrowed from ActiveSupport::Inflector
+      def nth(number)
+        if (11..13).include?(number.to_i % 100)
+          "#{number}th"
+        else
+          case number.to_i % 10
+          when 1 then "#{number}st"
+          when 2 then "#{number}nd"
+          when 3 then "#{number}rd"
+          else "#{number}th"
+          end
         end
       end
     end
