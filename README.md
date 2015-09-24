@@ -1,11 +1,11 @@
-# Rspec::Retry::Alt
+# Rspec::Repeat
 
 ```rb
 describe 'a stubborn test' do
-  include Rspec::Retry::Alt
+  include Rspec::Repeat
   
   around do |example|
-    retry example, 3
+    repeat example, 3.times
   end
 
   it 'works' do

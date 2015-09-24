@@ -1,10 +1,10 @@
-require 'rspec/retry/alt'
+require 'rspec/repeat'
 
 describe 'retry' do
-  include RSpec::Retry::Alt
+  include RSpec::Repeat
 
   around do |example|
-    rerun example, 20
+    repeat example, 20.times
   end
 
   it 'works' do
