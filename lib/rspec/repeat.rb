@@ -40,7 +40,6 @@ module RSpec
 
       def run(ex, ctx)
         example = current_example(ctx)
-        ex = ex
 
         count.each do |i|
           example.instance_variable_set :@exception, nil
