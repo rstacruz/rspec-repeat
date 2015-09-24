@@ -1,20 +1,18 @@
-require "rspec/retry/alt/version"
+require 'rspec/retry/alt/version'
 
-module Rspec
+module RSpec
   module Retry
+    # Retry
     module Alt
-      extend self
-
       # Retries an example.
       #
       #     include Rspec::Retry::Alt
       #
-      #     around :each do |example|
-      #       retry example, 3
+      #     around do |example|
+      #      rerun example, 3
       #     end
       #
-      def retry(ex, count, options = {})
-        count = options[:retry]
+      def rerun(ex, count, options = {})
         wait = options[:wait]
         exceptions = options[:exceptions]
         clear_lets = options[:clear_lets]
@@ -31,18 +29,20 @@ module Rspec
         end
       end
 
-      module Utils
-        extend self
+      module Utils # :nodoc:
+        module_function
 
         def print_failure(i, example)
-          msg = "RspecRetryAlt: #{i + 1} try error in #{example.location}:\n  #{example.exception.to_s}\n"
+          msg =
+            "RSpecRetryAlt: #{i + 1} try error in #{example.location}:\n" \
+            "  #{example.exception}\n"
           RSpec.configuration.reporter.message(msg)
         end
 
         def matches_exceptions?(exceptions, exception)
           return unless exceptions.any?
           exceptions.any? do |exception_klass|
-            example.exception.is_a?(exception_klass)
+            exception.is_a?(exception_klass)
           end
         end
       end

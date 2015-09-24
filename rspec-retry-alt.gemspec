@@ -5,7 +5,7 @@ require 'rspec/retry/alt/version'
 
 Gem::Specification.new do |spec|
   spec.name          = "rspec-retry-alt"
-  spec.version       = Rspec::Retry::Alt::VERSION
+  spec.version       = RSpec::Retry::Alt::VERSION
   spec.authors       = ["Rico Sta. Cruz"]
   spec.email         = ["rico@ricostacruz.com"]
 
@@ -21,5 +21,5 @@ Gem::Specification.new do |spec|
 
   spec.add_development_dependency "bundler", "~> 1.10"
   spec.add_development_dependency "rake", "~> 10.0"
-  spec.add_development_dependency "minitest"
+  spec.add_development_dependency "rspec"
 end
