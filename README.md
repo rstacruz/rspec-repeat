@@ -70,7 +70,10 @@ end
 In these cases, it'd be smart to restrict which exceptions to be retried.
 
 ```rb
-repeat example, 3.times, exceptions: [ Net::ReadTimeout ]
+repeat example, 3.times, verbose: true, exceptions: [
+  Net::ReadTimeout,
+  Selenium::WebDriver::Error::WebDriverError
+]
 ```
 
 <br>
