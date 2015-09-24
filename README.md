@@ -67,7 +67,7 @@ RSpec.configure do
 end
 ```
 
-In these cases, it'd me smart to restrict which exceptions to be retried.
+In these cases, it'd be smart to restrict which exceptions to be retried.
 
 ```rb
 repeat example, 3.times, exceptions: [ Net::ReadTimeout ]
