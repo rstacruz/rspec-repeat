@@ -2,12 +2,25 @@ require 'rspec/repeat'
 
 describe 'retry' do
   include RSpec::Repeat
+  describe 'normal case' do
+    around do |example|
+      repeat example, 100.times
+    end
 
-  around do |example|
-    repeat example, 100.times
+    it 'works' do
+      expect(rand(10)).to eq 0
+    end
   end
 
-  it 'works' do
-    expect(rand(10)).to eq 0
+  describe 'clearing let' do
+    around do |example|
+      repeat example, 100.times
+    end
+
+    let(:number) { rand(10) }
+
+    it 'works' do
+      expect(number).to eq 0
+    end
   end
 end
