@@ -45,7 +45,7 @@ module RSpec
           example.instance_variable_set :@exception, nil
           ex.run
           break if example.exception.nil?
-          break if matches_exceptions?(exceptions, example.exception)
+          break if !matches_exceptions?(exceptions, example.exception)
           print_failure(i, example) if verbose
           clear_memoize(ctx) if clear_let
           sleep wait if wait.to_i > 0
@@ -72,7 +72,7 @@ module RSpec
 
       # Checks if `exception` is in `exceptions`
       def matches_exceptions?(exceptions, exception)
-        return unless exceptions
+        return true unless exceptions
         exceptions.any? do |exception_klass|
           exception.is_a?(exception_klass)
         end

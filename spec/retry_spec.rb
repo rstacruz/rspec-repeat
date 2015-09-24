@@ -23,4 +23,16 @@ describe 'retry' do
       expect(number).to eq 0
     end
   end
+
+  describe 'exceptions list' do
+    FooError = Class.new(StandardError)
+
+    around do |example|
+      repeat example, 100.times, exceptions: [FooError]
+    end
+
+    it 'works' do
+      raise FooError if rand(10) != 0
+    end
+  end
 end
