@@ -16,6 +16,8 @@ describe 'a stubborn test' do
 end
 ```
 
+[![Status](https://travis-ci.org/rstacruz/rspec-repeat.svg?branch=master)](https://travis-ci.org/rstacruz/rspec-repeat "See test builds")
+
 <br>
 
 ## Advanced usage
