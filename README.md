@@ -30,10 +30,10 @@ repeat example, 3.times, { options }
 
 You can pass an `options` hash:
 
+- __clear_let__ *(Boolean)* - if *false*, `let` declarations will not be cleared.
+- __exceptions__ *(Array)* - if given, it will only retry exception classes from this list.
 - __wait__ *(Numeric)* - seconds to wait between each retry.
 - __verbose__ *(Boolean)* - if *true*, it will print messages upon failure.
-- __exceptions__ *(Array)* - if given, it will only retry exception classes from this list.
-- __clear_let__ *(Boolean)* - if *false*, `let` declarations will not be cleared.
 
 ### Attaching to tags
 
@@ -65,6 +65,12 @@ RSpec.configure do
     repeat example, 3.times
   end
 end
+```
+
+In these cases, it'd me smart to restrict which exceptions to be retried.
+
+```rb
+repeat example, 3.times, exceptions: [ Net::ReadTimeout ]
 ```
 
 <br>
