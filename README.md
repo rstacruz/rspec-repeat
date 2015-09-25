@@ -42,6 +42,7 @@ This will allow you to repeat any example multiple times by tagging it.
 ```rb
 # rails_helper.rb or spec_helper.rb
 RSpec.configure do
+  config.include RSpec::Repeat
   config.around :each, :foobar do |example|
     repeat example, 3.times
   end
@@ -61,6 +62,7 @@ This will make all `spec/features/` retry thrice. Perfect for Poltergeist/Seleni
 ```rb
 # rails_helper.rb or spec_helper.rb
 RSpec.configure do
+  config.include RSpec::Repeat
   config.around :each, type: :feature do
     repeat example, 3.times
   end
