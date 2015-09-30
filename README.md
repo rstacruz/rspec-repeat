@@ -66,7 +66,7 @@ RSpec.configure do
   config.around :each, type: :feature do
     repeat example, 3.times, verbose: true, exceptions: [
       Net::ReadTimeout,
-      Selenium::WebDriver::Error::WebDriverError
+      Selenium::WebDriver::Error::WebDriverError if defined?(::Selenium)
     ]
   end
 end
