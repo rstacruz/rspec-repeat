@@ -57,25 +57,19 @@ end
 
 ### Attaching to features
 
-This will make all `spec/features/` retry thrice. Perfect for Poltergeist/Selenium tests that intermittently fail for no reason.
+This will make all `spec/features/` retry thrice. Perfect for Poltergeist/Selenium tests that intermittently fail for no reason. In these cases, it'd be smart to restrict which exceptions to be retried.
 
 ```rb
-# rails_helper.rb or spec_helper.rb
+# rails_helper.rb
 RSpec.configure do
   config.include RSpec::Repeat
   config.around :each, type: :feature do
-    repeat example, 3.times
+    repeat example, 3.times, verbose: true, exceptions: [
+      Net::ReadTimeout,
+      Selenium::WebDriver::Error::WebDriverError
+    ]
   end
 end
-```
-
-In these cases, it'd be smart to restrict which exceptions to be retried.
-
-```rb
-repeat example, 3.times, verbose: true, exceptions: [
-  Net::ReadTimeout,
-  Selenium::WebDriver::Error::WebDriverError
-]
 ```
 
 <br>
