@@ -63,7 +63,7 @@ This will make all `spec/features/` retry thrice. Perfect for Poltergeist/Seleni
 # rails_helper.rb
 RSpec.configure do
   config.include RSpec::Repeat
-  config.around :each, type: :feature do
+  config.around :each, type: :feature do |example|
     repeat example, 3.times, verbose: true, exceptions: [
       Net::ReadTimeout,
       Selenium::WebDriver::Error::WebDriverError if defined?(::Selenium)
