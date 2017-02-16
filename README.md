@@ -43,15 +43,26 @@ This will allow you to repeat any example multiple times by tagging it.
 # rails_helper.rb or spec_helper.rb
 RSpec.configure do
   config.include RSpec::Repeat
-  config.around :each, :foobar do |example|
+  config.around :example, type: :feature do |example|
     repeat example, 3.times
   end
 end
 ```
 
 ```rb
-describe 'stubborn tests', :foobar do
+describe 'stubborn tests', type: :feature do
   # ...
+end
+```
+
+You may also use flag-style tags:
+
+```rb
+config.around :example, :js do |example|
+```
+
+```rb
+describe 'stubborn tests', :js do
 end
 ```
 
@@ -63,7 +74,7 @@ This will make all `spec/features/` retry thrice. Perfect for Poltergeist/Seleni
 # rails_helper.rb
 RSpec.configure do
   config.include RSpec::Repeat
-  config.around :each, type: :feature do |example|
+  config.around :example, type: :feature do |example|
     repeat example, 3.times, verbose: true, exceptions: [
       Net::ReadTimeout,
       Selenium::WebDriver::Error::WebDriverError if defined?(::Selenium)
