@@ -3,6 +3,8 @@
 Repeats an RSpec example until it succeeds.
 
 ```rb
+require 'rspec/repeat'
+
 describe 'a stubborn test' do
   include Rspec::Repeat
   
@@ -40,7 +42,9 @@ You can pass an `options` hash:
 This will allow you to repeat any example multiple times by tagging it.
 
 ```rb
-# rails_helper.rb or spec_helper.rb
+# spec_helper.rb
+require 'rspec/repeat'
+
 RSpec.configure do
   config.include RSpec::Repeat
   config.around :example, type: :feature do |example|
