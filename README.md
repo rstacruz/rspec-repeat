@@ -112,7 +112,7 @@ Much of this code has been refactored out of [rspec-retry](https://github.com/No
 
 ## Thanks
 
-**rspec-repeat** © 2015+, Rico Sta. Cruz. Released under the [MIT] License.<br>
+**rspec-repeat** © 2015-2017, Rico Sta. Cruz. Released under the [MIT] License.<br>
 Authored and maintained by Rico Sta. Cruz with help from contributors ([list][contributors]).
 
 > [ricostacruz.com](http://ricostacruz.com) &nbsp;&middot;&nbsp;
