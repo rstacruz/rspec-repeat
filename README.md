@@ -9,9 +9,9 @@
 if ENV['CI']
   require 'rspec/repeat'
 
-  RSpec.configure do
+  RSpec.configure do |config|
     config.include RSpec::Repeat
-    config.around :each do
+    config.around :each do |example|
       repeat example, 3.times, verbose: true
     end
   end
@@ -44,7 +44,7 @@ This will allow you to repeat any example multiple times by tagging it.
 # rails_helper.rb or spec_helper.rb
 require 'rspec/repeat'
 
-RSpec.configure do
+RSpec.configure do |config|
   config.include RSpec::Repeat
   config.around :each, :stubborn do |example|
     repeat example, 3.times
@@ -66,9 +66,9 @@ This will make all `spec/features/` retry thrice. Perfect for Poltergeist/Seleni
 # rails_helper.rb or spec_helper.rb
 require 'rspec/repeat'
 
-RSpec.configure do
+RSpec.configure do |config|
   config.include RSpec::Repeat
-  config.around :each, type: :feature do
+  config.around :each, type: :feature do |example|
     repeat example, 3.times
   end
 end
